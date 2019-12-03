@@ -13,7 +13,6 @@ static const unsigned char grid[] = {
     0|R|WW, 0|R|NW, 0|B|SS, 0|B|SE, 0|R|SS, 0|B|NW,
     0|B|SE, 0|R|NE, C|R|EE, 0|P|NE, C|R|NE, 0|B|NE,
     0|B|NE, 0|R|WW, 0|R|NE, 0|P|SW, 0|R|EE, 0
-
 };
 static const int moves[] = {
     +0, -1, +1, -1, +1, +0, +1, +1, +0, +1, -1, +1, -1, +0, -1, -1
