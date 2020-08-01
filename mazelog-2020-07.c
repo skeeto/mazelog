@@ -22,7 +22,7 @@ static const int moves[] = {
 static int
 solve(int *p, int n, int m, int bestn)
 {
-    static char seen[2][W*H];
+    static char seen[W*H][W*H];
     if (p[n] == W * H - 1) {
         for (int i = 0; i <= n; i++)
             printf("%d%c", p[i] + 1, " \n"[i == n]);
@@ -43,10 +43,11 @@ solve(int *p, int n, int m, int bestn)
                     int tc = grid[i] & 0x70;
                     int to = grid[i] & 0x80;
                     int nm = to ? !m : m;
-                    if (!seen[nm][i] && ((s == ts) || (c == tc))) {
+                    if (!seen[p[n]][i] && ((s == ts) || (c == tc))) {
                         p[n+1] = i;
-                        seen[nm][i] = 1;
+                        seen[p[n]][i] = 1;
                         bestn = solve(p, n + 1, nm, bestn);
+                        seen[p[n]][i] = 0;
                     }
                 } else {
                     break;
@@ -60,6 +61,6 @@ solve(int *p, int n, int m, int bestn)
 int
 main(void)
 {
-    int path[36] = {0};
+    int path[33] = {0};
     solve(path, 0, 0, sizeof(path) / sizeof(*path));
 }
