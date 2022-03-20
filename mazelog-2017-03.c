@@ -8,7 +8,7 @@ static const unsigned char grid[] = {
     SV|CR, ST|CR, ST|CB, SX|CB, SC|CY, SX|CO,
     SC|CO, SH|CG, SP|CP, SH|CO, SC|CP, SP|CR,
     ST|CO, SH|CB, SV|CB, SS|CO, SS|CR, SH|CR,
-    ST|CR, SC|CG, SS|CG, SS|CR, SX|CP, SC|CO,    
+    ST|CR, SC|CG, SS|CG, SS|CR, SX|CP, SC|CO,
     SV|CY, SP|CO, SV|CG, SP|CP, SX|CY, SC|CP,
 };
 static const signed char moves[] = {
@@ -31,7 +31,7 @@ solve(int *p, int n, int bestn)
             for (int r = 1; r < S; r++) {
                 int cx = x + r * moves[d * 2 + 0];
                 int cy = y + r * moves[d * 2 + 1];
-                if (cx < 0 || cx >= S || cy < 0 || cy >= S) 
+                if (cx < 0 || cx >= S || cy < 0 || cy >= S)
                     break;
                 int cp = cy * S + cx;
                 unsigned cv = (grid[cp] >> s) & 0x0f;

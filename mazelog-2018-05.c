@@ -9,7 +9,7 @@ static const char grid[] = {
     SE, NE, NE, EE, WW, NE,
     WW, NN, SS, NE, NN, WW,
     SE, SW, NN, NN, NW, EE,
-    EE, SW, WW, SE, NW, EE, 
+    EE, SW, WW, SE, NW, EE,
     NN, SS, NN, WW, NE, 0
 };
 static const int moves[] = {

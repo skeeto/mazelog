@@ -34,7 +34,7 @@ solve(int *p, int n, int v, int bestn)
                 p[n] = 0;
                 bestn = solve(p, n + 1, grid[0], bestn);
             } else if (tx >= 0 && tx < W &&
-                       ty >= 0 && ty < H && 
+                       ty >= 0 && ty < H &&
                        grid[t] + v >= 0) {
                 p[n] = t;
                 bestn = solve(p, n + 1, grid[t] + v, bestn);
