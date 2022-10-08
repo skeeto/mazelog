@@ -1,18 +1,19 @@
 #include <stdio.h>
 
-#define W 5
+#define W 6
 #define H 5
 enum {NN, NE, EE, SE, SS, SW, WW, NW};
 enum {B=' ', R='@'};
 static const char grid[] = {
-    B|SS, B|SW, B|SS, R|SS, R|WW,
-    R|EE, B|EE, B|SS, B|NW, B|NW,
-    B|SS, R|EE, B|WW, B|NN, B|SS,
-    R|SE, B|NE, R|EE, R|NW, B|WW,
-    R|NE, B|NE, R|NE, R|NW, B|R,
+    B|EE, R|SS, R|SS, R|SS, R|SE, R|SW,
+    R|EE, R|NN, R|NN, R|NN, R|SS, R|NN,
+    R|SS, B|SS, B|SS, B|SS, B|SS, R|SS,
+    R|SE, B|NN, B|NN, B|NN, B|NE, R|SS,
+    R|NN, B|NN, R|NW, B|NN, R|EE, B|R
 };
 static const int moves[] = {0,-1, 1,-1, 1,0, 1,1, 0,1, -1,1, -1,0, -1,-1};
-static const char opt[] = " @  @@   @@@    @@@@     @@@@@      @@@@@@";
+static const char opt[] = " @  @@   @@@    @@@@     @@@@@      "
+    "@@@@@@       @@@@@@@        @@@@@@@@";
 
 static int
 solve(int *p, int n, int bestn)
@@ -45,6 +46,6 @@ solve(int *p, int n, int bestn)
 int
 main(void)
 {
-    int path[32] = {0};
+    int path[43] = {0};
     solve(path, 0, sizeof(path)/sizeof(*path));
 }
