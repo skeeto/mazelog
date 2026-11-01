@@ -2,87 +2,62 @@
 
 #define W 5
 #define H 5
-enum {D=0, HEART=1, CLUB=2, SPADE=3};
-static const unsigned char grid[W*H] = {
-    D, HEART, CLUB, D, D,
-    HEART, SPADE, HEART, D, HEART,
-    D, D, SPADE, CLUB, D,
-    HEART, SPADE, HEART, HEART, D,
-    D, D, D, D, D
+enum {D, HR, C, S};
+static const char grid[] = {
+    D, HR, C, D, D,
+    HR, S, HR, D, HR,
+    D, D, S, C, D,
+    HR, S, HR, HR, D,
+    D, D, D, D, D,
+};
+static const signed char moves[] = {
+    -1,+0, +1,+0, +0,-1, +0,+1
 };
 
-static char seen[W*H*(W*H+1)];
-
+/* Jumps run any length, and cells may be revisited, so a state is the last two
+   cells: they hold the two symbols to avoid, and the direction not to repeat. */
 static int solve(int *p, int n, int bestn)
 {
-    int cur = p[n];
-    int prev = (n > 0) ? p[n-1] : -1;
-    if (cur == W*H - 1) {
+    if (p[n] == W*H - 1) {
         for (int i = 0; i <= n; i++) {
             printf("%d%c", p[i]+1, " \n"[i == n]);
         }
-        return n;
-    }
-    if (n >= bestn - 1) return bestn;
-
-    int cr = cur / W;
-    int cc = cur % W;
-
-    /* try all cells in same row */
-    for (int c = 0; c < W; c++) {
-        if (c == cc) continue;
-        int t = cr * W + c;
-        if (grid[t] == grid[cur]) continue;
-        if (n > 0 && grid[t] == grid[prev]) continue;
-        if (n > 0) {
-            int pr = prev / W;
-            int pc = prev % W;
-            if (cr == pr) {
-                int dir = (cc > pc) ? 1 : -1;
-                int ndir = (c > cc) ? 1 : -1;
-                if (ndir == -dir) continue;
+        bestn = n;
+    } else if (n < bestn-1) {
+        int x = p[n] % W;
+        int y = p[n] / W;
+        int a = grid[p[n]];
+        int b = (n < 1) ? -1 : grid[p[n-1]];
+        int ux = 0;
+        int uy = 0;
+        if (n >= 1) {
+            int px = p[n-1] % W;
+            int py = p[n-1] / W;
+            ux = (x>px) - (x<px);
+            uy = (y>py) - (y<py);
+        }
+        for (int i = 0; i < 4; i++) {
+            int dx = moves[i*2 + 0];
+            int dy = moves[i*2 + 1];
+            if (dx == -ux && dy == -uy) continue;
+            for (int v = 1; ; v++) {
+                int xx = x + v*dx;
+                int yy = y + v*dy;
+                if (xx<0 || xx>=W || yy<0 || yy>=H) break;
+                int t = yy*W + xx;
+                if (grid[t]!=a && grid[t]!=b) {
+                    p[n+1] = t;
+                    bestn = solve(p, n+1, bestn);
+                }
             }
         }
-        int idx = t * (W*H + 1) + (cur + 1);
-        if (seen[idx]) continue;
-        seen[idx] = 1;
-        p[n+1] = t;
-        bestn = solve(p, n+1, bestn);
-        seen[idx] = 0;
-        if (bestn == n+1) return bestn;
-    }
-    /* try all cells in same column */
-    for (int r = 0; r < H; r++) {
-        if (r == cr) continue;
-        int t = r * W + cc;
-        if (grid[t] == grid[cur]) continue;
-        if (n > 0 && grid[t] == grid[prev]) continue;
-        if (n > 0) {
-            int pr = prev / W;
-            int pc = prev % W;
-            if (cc == pc) {
-                int dir = (cr > pr) ? 1 : -1;
-                int ndir = (r > cr) ? 1 : -1;
-                if (ndir == -dir) continue;
-            }
-        }
-        int idx = t * (W*H + 1) + (cur + 1);
-        if (seen[idx]) continue;
-        seen[idx] = 1;
-        p[n+1] = t;
-        bestn = solve(p, n+1, bestn);
-        seen[idx] = 0;
-        if (bestn == n+1) return bestn;
     }
     return bestn;
 }
 
-int main(void)
+int main()
 {
-    int path[256];
-    path[0] = 0;
-    seen[0 * (W*H + 1) + 0] = 1;
-    int best = sizeof(path)/sizeof(*path);
-    best = solve(path, 0, best);
+    int path[26] = {0};
+    solve(path, 0, sizeof(path)/sizeof(*path));
     return 0;
 }
